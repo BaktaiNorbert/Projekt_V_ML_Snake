@@ -1,13 +1,37 @@
 #must install keyboard module pip install keyboard
 #must install playsound module pip install playsound=1.2.2
 #Python 3.10 or above required
-import keyboard
-import time 
+#Check packages
+import pip
+import time
 from math import floor
 import asyncio #több loop egyszerre tudjon futni
-from os import system, path, name #Konzol tisztításának módszeréhez
+from os import system, path, name #Konzol tisztításához
 from random import randint
-from playsound import playsound
+def install(modul):
+    pip.main(['install',modul])
+#from playsound import playsound
+def Initialize():
+    global keyboard
+    global playsound
+    t = "module was not found. Installing..."
+    try:
+        import keyboard
+    except ImportError:
+        system('cls' if name == 'nt' else 'clear')
+        print("\u001b[31mkeyboard",t,"\u001b[30m")
+        time.sleep(0.6)
+        install('keyboard')
+        import keyboard
+    try:
+        from playsound import playsound
+    except ImportError:
+        system('cls' if name == 'nt' else 'clear')
+        print("\u001b[31mplaysound",t,"\u001b[30m")
+        time.sleep(0.6)
+        install('playsound==1.2.2')
+        from playsound import playsound
+#import keyboard
 class Vector2: #for convinience, should contain 2 numbers.
     def __init__(self, ix, iy):
         self.x = ix
@@ -142,8 +166,9 @@ async def RunGame():
             first_frame = False
             print("Length: \033[33m",len(last_positions),"\033[00m Position:\033[33m",player.position.x,player.position.y,"\033[00m\033[0m")
 async def Main():
+    Initialize()
     print(f"\033[92m           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /::\    \                /::\____\                /::\    \                /::\____\                /::\    \        \n        /::::\    \              /::::|   |               /::::\    \              /:::/    /               /::::\    \       \n       /::::::\    \            /:::::|   |              /::::::\    \            /:::/    /               /::::::\    \      \n      /:::/\:::\    \          /::::::|   |             /:::/\:::\    \          /:::/    /               /:::/\:::\    \     \n     /:::/__\:::\    \        /:::/|::|   |            /:::/__\:::\    \        /:::/____/               /:::/__\:::\    \    \n     \:::\   \:::\    \      /:::/ |::|   |           /::::\   \:::\    \      /::::\    \              /::::\   \:::\    \   \n   ___\:::\   \:::\    \    /:::/  |::|   | _____    /::::::\   \:::\    \    /::::::\____\________    /::::::\   \:::\    \  \n  /\   \:::\   \:::\    \  /:::/   |::|   |/\    \  /:::/\:::\   \:::\    \  /:::/\:::::::::::\    \  /:::/\:::\   \:::\    \ \n /::\   \:::\   \:::\____\/:: /    |::|   /::\____\/:::/  \:::\   \:::\____\/:::/  |:::::::::::\____\/:::/__\:::\   \:::\____\ \n \:::\   \:::\   \::/    /\::/    /|::|  /:::/    /\::/    \:::\  /:::/    /\::/   |::|~~~|~~~~~     \:::\   \:::\   \::/    /\n  \:::\   \:::\   \/____/  \/____/ |::| /:::/    /  \/____/ \:::\/:::/    /  \/____|::|   |           \:::\   \:::\   \/____/ \n   \:::\   \:::\    \              |::|/:::/    /            \::::::/    /         |::|   |            \:::\   \:::\    \     \n    \:::\   \:::\____\             |::::::/    /              \::::/    /          |::|   |             \:::\   \:::\____\    \n     \:::\  /:::/    /             |:::::/    /               /:::/    /           |::|   |              \:::\   \::/        \n      \:::\/:::/    /              |::::/    /               /:::/    /            |::|   |               \:::\   \/____/     \n       \::::::/    /               /:::/    /               /:::/    /             |::|   |                \:::\    \         \n        \::::/    /               /:::/    /               /:::/    /              \::|   |                 \:::\____\        \n         \::/    /                \::/    /                \::/    /                \:|   |                  \::/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n                                                                                                                              \033[0m")
-    s = " "*123
+    s = " "*126
     for i in range(63):
         s = s[:64-i] + "_"*i*2 + s[64 + i+1::]
         print("\033[F\033[92m",s)
