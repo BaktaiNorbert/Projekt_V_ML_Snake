@@ -66,13 +66,7 @@ class Body:
 #CREATING MAP
 heuristic = False
 slash = "/"
-match p_system(): #ha valaki linuxon akarja futtatni más a jel hogy hogyan szerezze meg a fájlt (Nem \ hanem /)
-    case "Windows":
-        slash = '\\'
-    case "Linux":
-        slash = '/'
-    case "Java":
-        slash = '/'
+if p_system() == "Windows": slash = "\\"
 if path.exists(f"{path.dirname(path.abspath(__file__))}{slash}config.snake"): #ellenorzi van-e ilyen fájl
     #adatokat beolvassa
     f = open(f"{path.dirname(path.abspath(__file__))}{slash}config.snake","r") 
@@ -144,11 +138,10 @@ async def RunGame():
                 apple = Body("O",Vector2(randint(2,screen.resolution.x),randint(1,screen.resolution.y-2)))
                 for i in last_positions:
                     if apple.position.x == i.x and apple.position.y == i.y: apple = Body("O",Vector2(randint(2,screen.resolution.x),randint(1,screen.resolution.y-2)))
-            match player.rotation: #switch
-                case 1: player.position.y -= 1;player.head.character = "△"
-                case 2: player.position.y += 1;player.head.character = "▽"
-                case 3: player.position.x -= 1;player.head.character = "<" 
-                case 4: player.position.x += 1;player.head.character = ">"
+            if player.rotation == 1: player.position.y -= 1;player.head.character = "△"
+            elif player.rotation == 2: player.position.y += 1;player.head.character = "▽"
+            elif player.rotation == 3: player.position.x -= 1;player.head.character = "<"
+            elif player.rotation == 4: player.position.x += 1;player.head.character = ">"
             if last_frame_rotation != player.rotation: await PlaySound()
             last_frame_rotation = int(player.rotation)
             Viewport.replaceCharacter(apple.position.x,apple.position.y,apple.character)
@@ -175,7 +168,7 @@ async def Main():
         print("\033[F\033[92m",s)
         time.sleep(0.006)
     print("\033[F"*23 + "           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /oo\    \                /oo\____\                /oo\    \                /oo\____\                /oo\    \        \n        /oooo\    \              /oooo|   |               /oooo\    \              /ooo/    /               /oooo\    \       \n       /oooooo\    \            /ooooo|   |              /oooooo\    \            /ooo/    /               /oooooo\    \      \n      /ooo/\ooo\    \          /oooooo|   |             /ooo/\ooo\    \          /ooo/    /               /ooo/\ooo\    \     \n     /ooo/__\ooo\    \        /ooo/|oo|   |            /ooo/__\ooo\    \        /ooo/____/               /ooo/__\ooo\    \    \n     \ooo\   \ooo\    \      /ooo/ |oo|   |           /oooo\   \ooo\    \      /oooo\    \              /oooo\   \ooo\    \   \n   ___\ooo\   \ooo\    \    /ooo/  |oo|   | _____    /oooooo\   \ooo\    \    /oooooo\____\________    /oooooo\   \ooo\    \  \n  /\   \ooo\   \ooo\    \  /ooo/   |oo|   |/\    \  /ooo/\ooo\   \ooo\    \  /ooo/\ooooooooooo\    \  /ooo/\ooo\   \ooo\    \ \n /oo\   \ooo\   \ooo\____\/oo /    |oo|   /oo\____\/ooo/  \ooo\   \ooo\____\/ooo/  |ooooooooooo\____\/ooo/__\ooo\   \ooo\____\ \n \ooo\   \ooo\   \oo/    /\oo/    /|oo|  /ooo/    /\oo/    \ooo\  /ooo/    /\oo/   |oo|~~~|~~~~~     \ooo\   \ooo\   \oo/    /        \n  \ooo\   \ooo\   \/____/  \/____/ |oo| /ooo/    /  \/____/ \ooo\/ooo/    /  \/____|oo|   |           \ooo\   \ooo\   \/____/ \n   \ooo\   \ooo\    \              |oo|/ooo/    /            \oooooo/    /         |oo|   |            \ooo\   \ooo\    \     \n    \ooo\   \ooo\____\             |oooooo/    /              \oooo/    /          |oo|   |             \ooo\   \ooo\____\    \n     \ooo\  /ooo/    /             |ooooo/    /               /ooo/    /           |oo|   |              \ooo\   \oo/    /    \n      \ooo\/ooo/    /              |oooo/    /               /ooo/    /            |oo|   |               \ooo\   \/____/     \n       \oooooo/    /               /ooo/    /               /ooo/    /             |oo|   |                \ooo\    \         \n        \oooo/    /               /ooo/    /               /ooo/    /              \oo|   |                 \ooo\____\        \n         \oo/    /                \oo/    /                \oo/    /                \o|   |                  \oo/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n ")
-    print(" "*50,"Made by: Cyberfox Version 1.1")
+    print(" "*50,"Made by: Cyberfox Version 1.2")
     if sound: playsound(f"{path.dirname(path.abspath(__file__))}{slash}sounds{slash}blOOOP.mp3")
     print("\033[0m",end="\n")
     system('cls' if name == 'nt' else 'clear')
