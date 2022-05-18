@@ -6,7 +6,7 @@ import pip
 import time
 from math import floor
 import asyncio #több loop egyszerre tudjon futni
-from os import system, path, name #Konzol tisztításához
+from os import system, path, name, get_terminal_size #Konzol tisztításához
 from platform import system as p_system
 from random import randint
 def install(modul):
@@ -80,9 +80,14 @@ else:
     #ha nincs ilyen fájl bekéri a szükséges adatokat
     system('cls' if name == 'nt' else 'clear')
     print("\u001b[31mConfig file nem található, \033[33múj készítése...\n   ______                __  _                ______            _____          _____ __   \n   / ____/_______  ____ _/ /_(_)___  ____ _   / ____/___  ____  / __(_)___ _   / __(_) /__ \n  / /   / ___/ _ \/ __ `/ __/ / __ \/ __ `/  / /   / __ \/ __ \/ /_/ / __ `/  / /_/ / / _ \ \n / /___/ /  /  __/ /_/ / /_/ / / / / /_/ /  / /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __/\n \____/_/   \___/\__,_/\__/_/_/ /_/\__, /   \____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/ \n                                  /____/                           /____/                  \n\033[00m")
-    area = (input("Kérem adja meg a pálya \033[33mméretét\033[00m szóközökkel elválasztva: \033[33m").split(" ")) #kézileg pálya megadása
-    sound = 1 if input("\033[00mLegyen \033[33mhang\033[00m? [Y/n]\033[33m") == "Y" else 0
-    refresh_rate = float(input("Frissítési ciklus\033[00m sűrűsége: "))
+    if input("Auto config? [Y/n]") == "Y":
+        area = [str(40),str(10)]
+        sound = 1
+        refresh_rate = 0.1
+    else:
+        area = (input("Kérem adja meg a pálya \033[33mméretét\033[00m szóközökkel elválasztva: \033[33m").split(" ")) #kézileg pálya megadása
+        sound = 1 if input("\033[00mLegyen \033[33mhang\033[00m? [Y/n]\033[33m") == "Y" else 0
+        refresh_rate = float(input("Frissítési ciklus\033[00m sűrűsége: "))
     w = open(f"{path.dirname(path.abspath(__file__))}{slash}config.snake","w")
     w.write(f"refresh_rate {refresh_rate}\nsize {area[0]}:{area[1]}\nheuristic 1\nplaysound {int(sound)}")
     w.close()
