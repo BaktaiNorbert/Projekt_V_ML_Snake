@@ -95,7 +95,7 @@ def train():
             total_score += score
             mean_score = total_score/agent.n_games
             mean_scores.append(mean_score)
-            #plot(plot_scores,mean_scores)
+            plot(plot_scores,mean_scores)
 if __name__ == '__main__':
     #game = AISnakeGame()
     #game.Initialize()
