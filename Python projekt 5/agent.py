@@ -116,11 +116,12 @@ async def train():
         if keyboard.is_pressed('q'):quit()
 #MENU
 def play_switch():
-    playsound(os.path.join(os.path.dirname(os.path.abspath(__file__)),'sounds','Menuswitch2.wav'),False)
+    if bool(int(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'config.snake')).readlines()[3].split(' ')[1])): playsound(os.path.join(os.path.dirname(os.path.abspath(__file__)),'sounds','Menuswitch2.wav'),False)
 def play_select():
-    playsound(os.path.join(os.path.dirname(os.path.abspath(__file__)),'sounds','Menuselect.wav'),False)
+    if bool(int(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'config.snake')).readlines()[3].split(' ')[1])): playsound(os.path.join(os.path.dirname(os.path.abspath(__file__)),'sounds','Menuselect.wav'),False)
 async def file_manager():
     input()
+    os.system('cls' if os.name == 'nt' else 'clear')
     val = 0
     last_input_received = -2
     dirs = [name for name in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),'model'))]
@@ -143,13 +144,14 @@ async def file_manager():
         if keyboard.is_pressed('enter') and last_input_received != -2: play_select();return dirs[val]
 async def change_value(typea,name,b = False):
     input()
+    os.system('cls' if os.name == 'nt' else 'clear')
     while True:
         try:
             os.system('cls' if os.name == 'nt' else 'clear')
             if typea == 'float': input();return float(input(f"New value of \033[92m{name}\033[0m: "))
             elif typea == 'int': return int(input(f"New value of \033[92m{name}\033[0m): "))
             elif typea == 'bool': return int(b)
-            elif typea == 'str': return input(f"New value of \033[92m{name}\033[0m: ")
+            elif typea == 'str': input();return input(f"New value of \033[92m{name}\033[0m: ")
             elif typea == 'path': return await file_manager()
             break
         except:
@@ -249,6 +251,7 @@ class button:
    #         
 async def get_input_menu():
     global input_value,buttons
+    Config_editor()
     last_input_received = -1
     val = 0
     buttons = [button(text="Train AI"),button(text="Play without AI "),button(text="Configure "),button(text="Quit")]
