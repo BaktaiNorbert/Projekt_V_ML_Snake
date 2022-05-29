@@ -14,7 +14,7 @@ class Linear_QNet(nn.Module):
         x = self.linear2(x)
         return x
     def save(self,file_name='model.smort'):
-        model_folder_path = './model'
+        model_folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'model')
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
         file_name = os.path.join(model_folder_path, file_name)

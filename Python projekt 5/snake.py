@@ -2,7 +2,7 @@
 #must install playsound module pip install playsound=1.2.2
 #Python 3.10 recommended
 #Check packages
-from distutils.command.install_scripts import install_scripts
+from ast import Import
 import pip
 import time
 from math import floor
@@ -35,12 +35,33 @@ def Initialize(): #modulok ellenorzese
     except ImportError:
         print("\u001b[31mtorch",t,"\u001b[30m")
         install("torch")
+    try:
+        import numpy
+    except ImportError:
         print("\u001b[31mnumpy",t,"\u001b[30m")
         install("numpy")
+    try:
+        import matplotlib
+    except ImportError:
         print("\u001b[31m matplotlib",t,"\u001b[30m")
         install("matplotlib")
+    try:
+        import IPython
+    except ImportError:
         print("\u001b[31mIPython",t,"\u001b[30m")
         install("IPython")
+    system('cls' if name == 'nt' else 'clear')
+    print(f"\033[92m           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /::\    \                /::\____\                /::\    \                /::\____\                /::\    \        \n        /::::\    \              /::::|   |               /::::\    \              /:::/    /               /::::\    \       \n       /::::::\    \            /:::::|   |              /::::::\    \            /:::/    /               /::::::\    \      \n      /:::/\:::\    \          /::::::|   |             /:::/\:::\    \          /:::/    /               /:::/\:::\    \     \n     /:::/__\:::\    \        /:::/|::|   |            /:::/__\:::\    \        /:::/____/               /:::/__\:::\    \    \n     \:::\   \:::\    \      /:::/ |::|   |           /::::\   \:::\    \      /::::\    \              /::::\   \:::\    \   \n   ___\:::\   \:::\    \    /:::/  |::|   | _____    /::::::\   \:::\    \    /::::::\____\________    /::::::\   \:::\    \  \n  /\   \:::\   \:::\    \  /:::/   |::|   |/\    \  /:::/\:::\   \:::\    \  /:::/\:::::::::::\    \  /:::/\:::\   \:::\    \ \n /::\   \:::\   \:::\____\/:: /    |::|   /::\____\/:::/  \:::\   \:::\____\/:::/  |:::::::::::\____\/:::/__\:::\   \:::\____\ \n \:::\   \:::\   \::/    /\::/    /|::|  /:::/    /\::/    \:::\  /:::/    /\::/   |::|~~~|~~~~~     \:::\   \:::\   \::/    /\n  \:::\   \:::\   \/____/  \/____/ |::| /:::/    /  \/____/ \:::\/:::/    /  \/____|::|   |           \:::\   \:::\   \/____/ \n   \:::\   \:::\    \              |::|/:::/    /            \::::::/    /         |::|   |            \:::\   \:::\    \     \n    \:::\   \:::\____\             |::::::/    /              \::::/    /          |::|   |             \:::\   \:::\____\    \n     \:::\  /:::/    /             |:::::/    /               /:::/    /           |::|   |              \:::\   \::/        \n      \:::\/:::/    /              |::::/    /               /:::/    /            |::|   |               \:::\   \/____/     \n       \::::::/    /               /:::/    /               /:::/    /             |::|   |                \:::\    \         \n        \::::/    /               /:::/    /               /:::/    /              \::|   |                 \:::\____\        \n         \::/    /                \::/    /                \::/    /                \:|   |                  \::/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n                                                                                                                              \033[0m")
+    s = " "*126
+    for i in range(63):
+        s = s[:64-i] + "_"*i*2 + s[64 + i+1::]
+        print("\033[F\033[92m",s)
+        time.sleep(0.006)
+    print("\033[F"*23 + "           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /oo\    \                /oo\____\                /oo\    \                /oo\____\                /oo\    \        \n        /oooo\    \              /oooo|   |               /oooo\    \              /ooo/    /               /oooo\    \       \n       /oooooo\    \            /ooooo|   |              /oooooo\    \            /ooo/    /               /oooooo\    \      \n      /ooo/\ooo\    \          /oooooo|   |             /ooo/\ooo\    \          /ooo/    /               /ooo/\ooo\    \     \n     /ooo/__\ooo\    \        /ooo/|oo|   |            /ooo/__\ooo\    \        /ooo/____/               /ooo/__\ooo\    \    \n     \ooo\   \ooo\    \      /ooo/ |oo|   |           /oooo\   \ooo\    \      /oooo\    \              /oooo\   \ooo\    \   \n   ___\ooo\   \ooo\    \    /ooo/  |oo|   | _____    /oooooo\   \ooo\    \    /oooooo\____\________    /oooooo\   \ooo\    \  \n  /\   \ooo\   \ooo\    \  /ooo/   |oo|   |/\    \  /ooo/\ooo\   \ooo\    \  /ooo/\ooooooooooo\    \  /ooo/\ooo\   \ooo\    \ \n /oo\   \ooo\   \ooo\____\/oo /    |oo|   /oo\____\/ooo/  \ooo\   \ooo\____\/ooo/  |ooooooooooo\____\/ooo/__\ooo\   \ooo\____\ \n \ooo\   \ooo\   \oo/    /\oo/    /|oo|  /ooo/    /\oo/    \ooo\  /ooo/    /\oo/   |oo|~~~|~~~~~     \ooo\   \ooo\   \oo/    /        \n  \ooo\   \ooo\   \/____/  \/____/ |oo| /ooo/    /  \/____/ \ooo\/ooo/    /  \/____|oo|   |           \ooo\   \ooo\   \/____/ \n   \ooo\   \ooo\    \              |oo|/ooo/    /            \oooooo/    /         |oo|   |            \ooo\   \ooo\    \     \n    \ooo\   \ooo\____\             |oooooo/    /              \oooo/    /          |oo|   |             \ooo\   \ooo\____\    \n     \ooo\  /ooo/    /             |ooooo/    /               /ooo/    /           |oo|   |              \ooo\   \oo/    /    \n      \ooo\/ooo/    /              |oooo/    /               /ooo/    /            |oo|   |               \ooo\   \/____/     \n       \oooooo/    /               /ooo/    /               /ooo/    /             |oo|   |                \ooo\    \         \n        \oooo/    /               /ooo/    /               /ooo/    /              \oo|   |                 \ooo\____\        \n         \oo/    /                \oo/    /                \oo/    /                \o|   |                  \oo/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n ")
+    print(" "*50,"Made by: Cyberfox Version 1.2")
+    playsound(f"{path.dirname(path.abspath(__file__))}\sounds\\blOOOP.mp3")
+    print("\033[0m",end="\n")
+    system('cls' if name == 'nt' else 'clear')
 class Vector2: #2 számot tartalmaz (x és y-t)
     def __init__(self, ix: int, iy: int):
         self.x = ix
@@ -85,7 +106,7 @@ class AISnakeGame:
         self.steps_taken = 0
 #MAP KÉSZÍTÉSE
     def CreateMap():
-        global heuristic,middle,slash,sound,refresh_rate,screen,top,bottom,player,apple,last_frame_rotation,animations
+        global heuristic,middle,slash,sound,refresh_rate,screen,top,bottom,player,apple,last_frame_rotation,animations,inp
         heuristic = False
         slash = "/"
         if p_system() == "Windows": slash = "\\"#Ha Windows nem / hanem \ jel kell
@@ -104,7 +125,7 @@ class AISnakeGame:
             system('cls' if name == 'nt' else 'clear')
             print("\u001b[31mConfig file nem található, \033[33múj készítése...\n   ______                __  _                ______            _____          _____ __   \n   / ____/_______  ____ _/ /_(_)___  ____ _   / ____/___  ____  / __(_)___ _   / __(_) /__ \n  / /   / ___/ _ \/ __ `/ __/ / __ \/ __ `/  / /   / __ \/ __ \/ /_/ / __ `/  / /_/ / / _ \ \n / /___/ /  /  __/ /_/ / /_/ / / / / /_/ /  / /___/ /_/ / / / / __/ / /_/ /  / __/ / /  __/\n \____/_/   \___/\__,_/\__/_/_/ /_/\__, /   \____/\____/_/ /_/_/ /_/\__, /  /_/ /_/_/\___/ \n                                  /____/                           /____/                  \n\033[00m")
             if input("Auto config? [Y/n]") == "Y":
-                area = [str(40),str(10)]
+                area = [str(10),str(10)]
                 sound = 1
                 animations = 1
                 refresh_rate = 0.1
@@ -155,20 +176,26 @@ class AISnakeGame:
             elif keyboard.is_pressed("d")and player.rotation != 3 and player.rotation != 4 and inp != 4:inp = 4
             elif keyboard.is_pressed("q"):quit() #Kilépés
             elif keyboard.is_pressed("p"):pause = not pause #Megállítás átmenetileg
-    async def Step(self,action):
+    async def heuristic_loop(self):
+        while True:
+            await self.Step(h=True)
+    async def Step(self,action = [0,0,0,1], h = False):
         first_frame = True
         global apple,last_frame_rotation
         #while True:
         await asyncio.sleep(refresh_rate)#refresh_rate másodpercenként frissül a játék
+        if h:
+            d = {1 : [1,0,0,0],2 : [0,1,0,0],3 : [0,0,1,0],4 : [0,0,0,1]}
+            action = d[inp]
         if action.index(1) == 0 and player.rotation != 2:player.rotation = 1
         elif action.index(1) == 1 and player.rotation != 1:player.rotation = 2
         elif action.index(1) == 2 and player.rotation != 4:player.rotation = 3
         elif action.index(1) == 3 and player.rotation != 3:player.rotation = 4
         if not self.pause:
             return_val = []
-            if player.position.x == screen.resolution.x + 1 or player.position.x == 1 or player.position.y == screen.resolution.y or player.position.y == 0 or self.steps_taken > 100*(len(self.last_positions)+1): AISnakeGame.GameOver(self.isHeuristic);return -10,True,len(self.last_positions),player.position#Határt ér a snake
+            if player.position.x == screen.resolution.x + 1 or player.position.x == 1 or player.position.y == screen.resolution.y or player.position.y == 0 or self.steps_taken > 100*(len(self.last_positions)+1): AISnakeGame.GameOver(h);return -10,True,len(self.last_positions),player.position#Határt ér a snake
             for position in self.last_positions:
-                if player.position.x == position.x and player.position.y == position.y and self.last_positions.index(position) != len(self.last_positions)-1: AISnakeGame.GameOver(self.isHeuristic);return -10,True,len(self.last_positions),player.position #Belemnegy a farkába a snake
+                if player.position.x == position.x and player.position.y == position.y and self.last_positions.index(position) != len(self.last_positions)-1: AISnakeGame.GameOver(h);return -10,True,len(self.last_positions),player.position #Belemnegy a farkába a snake
             if player.position.x == apple.position.x and player.position.y == apple.position.y: #Almába ért e a snake
                 player.points += 1
                 if sound: playsound(f"{path.dirname(path.abspath(__file__))}{slash}sounds{slash}Score.wav",0)#Felvevés hang
