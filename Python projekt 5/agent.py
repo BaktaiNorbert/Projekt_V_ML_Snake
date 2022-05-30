@@ -1,5 +1,5 @@
 def import_stuff():
-    global torch,random,AISnakeGame,Initialize,Vector2,np,deque,os,Linear_QNet,QTrainer,plot,asyncio,floor,keyboard,time,Config_editor,playsound
+    global torch,random,AISnakeGame,Initialize,Vector2,np,deque,os,Linear_QNet,QTrainer,plot,asyncio,floor,keyboard,time,Config_editor,playsound,pyplot
     import torch
     import random
     from snake import AISnakeGame, Vector2
@@ -14,6 +14,7 @@ def import_stuff():
     from config_editor import Config_editor
     import time
     from playsound import playsound
+    from matplotlib import pyplot
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.001
@@ -31,8 +32,9 @@ class Agent:
         except:
             self.size = ['10','10']
         self.position = Vector2(int(floor(int(self.size[0])/2)),int(floor(int(self.size[1])/2)))
-        self.model = Linear_QNet(12,256,4) #TODO
+        self.model = Linear_QNet(17,512,4)
         self.trainer = QTrainer(self.model, lr=LR,gamma=self.gamma) # HOW TO LOAD MODEL: THESE 3 LINES OF CODE
+        self.score = 0
         try:
             self.rdm = 0
             self.model.load_state_dict(torch.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'config.snake')).readlines()[5].rstrip().split(' ')[1])) #self.model.load_state_dict(torch.load("./model/model.smort"))
@@ -44,9 +46,11 @@ class Agent:
         head = game.position
         #s = open(f"{os.path.dirname(os.path.abspath(__file__))}\config.snake","r").readlines()[1].rstrip().split(" ")[1].split(":")
         s = game.size
+        last_positions = game.last_positionss
+        self.score = len(last_positions)
         #up down left right
         apple_loc_raw = game.apple.position.ToList()
-        state = [head.y == 2,head.y == int(s[1])-2,head.x == 3,head.x == int(s[0])-1,game.rotation == 1,game.rotation == 2,game.rotation == 3,game.rotation == 4,apple_loc_raw[1] < head.y,apple_loc_raw[1] > head.y,apple_loc_raw[0] < head.x,apple_loc_raw[0] > head.x]
+        state = [head.y == 2,head.y == int(s[1])-2,head.x == 3,head.x == int(s[0])-1,game.rotation == 1,game.rotation == 2,game.rotation == 3,game.rotation == 4,apple_loc_raw[1] < head.y,apple_loc_raw[1] > head.y,apple_loc_raw[0] < head.x,apple_loc_raw[0] > head.x,0 < [i.x == head.x-1 for i in last_positions if i.y == head.y].count(True),0 < [i.x == head.x+1 for i in last_positions if i.y == head.y].count(True),0 < [i.y == head.y-1 for i in last_positions if i.x == head.x].count(True),0 < [i.y == head.y+1 for i in last_positions if i.x == head.x].count(True),self.score]
         #open("app.txt","a").write(str(state[len(state):len(state)-5:-1]) + "\n")
         return np.array(state, dtype=int)
     def remember(self,state,action,reward,next_state,done):
@@ -106,13 +110,14 @@ async def train():
                 record = score
                 agent.model.save()
             #print("Game",agent.n_games,"Score: ",score,"Record:",record)
-            plot_scores.append(score)
+            plot_scores.append(score-3)
             total_score += score
             mean_score = total_score/agent.n_games
             mean_scores.append(mean_score)
             plot(plot_scores,mean_scores)
         if keyboard.is_pressed('ctrl + a'): agent.model.save()
         if keyboard.is_pressed('ctrl + s'): input(); agent.model.save(input("Model name: ")+'.smort');os.system('cls' if os.name == 'nt' else 'clear')
+        if keyboard.is_pressed('esc'): os.system('cls' if os.name == 'nt' else 'clear');pyplot.close();return
         if keyboard.is_pressed('q'):quit()
 #MENU
 def play_switch():
@@ -122,26 +127,26 @@ def play_select():
 async def file_manager():
     input()
     os.system('cls' if os.name == 'nt' else 'clear')
-    val = 0
+    val = -1
     last_input_received = -2
     dirs = [name for name in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),'model'))]
     while len(dirs)>0:
         await asyncio.sleep(0.01)
         if should_return: return
-        if keyboard.is_pressed("w") and val > 0 and last_input_received != 0:val-=1;last_input_received = 0;play_switch()
+        if keyboard.is_pressed("w") and val > -1 and last_input_received != 0:val-=1;last_input_received = 0;play_switch()
         elif not keyboard.is_pressed("w") and last_input_received == 0: last_input_received = -1
         if keyboard.is_pressed("s") and val < len(dirs)-1 and last_input_received != 1:val+=1;last_input_received = 1;play_switch()
         elif not keyboard.is_pressed("s") and last_input_received == 1: last_input_received = -1
         if keyboard.is_pressed("q"):quit()
-        print("\033[F"*(len(dirs)+2))
-        out = ""
+        print("\033[F"*(len(dirs)+3))
+        out = "None ■\n" if val == -1 else "None  \n"
         for file in dirs:
-            if file == dirs[val]:
+            if file == dirs[val] and val != -1:
                 out += file + " ■" + '\n'
             else:    
                 out += file + "  " + '\n'
         print("\033[92m",out,"\033[0m")
-        if keyboard.is_pressed('enter') and last_input_received != -2: play_select();return dirs[val]
+        if keyboard.is_pressed('enter') and last_input_received != -2: play_select();return dirs[val] if val != -1 else "."
 async def change_value(typea,name,b = False):
     input()
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -227,28 +232,9 @@ class button:
         elif self.text == 'Configure ':
             os.system('cls' if os.name == 'nt' else 'clear')
             await options()
-        #    buttons[0].change_text('Refresh rate')
-        #    buttons[1].change_text('Sound')
-        #    buttons[2].change_text('Animations')
-        #    buttons[3].change_text('Load')
-        #elif self.text == 'Refresh rate': c_editor.change_setting('refresh_rate',self.ask_input('refresh rate'))
-        #elif self.text == 'Sound': c_editor.change_setting('playsound',self.ask_input('sound','[0/1]'))
-        #elif self.text == 'Animations': c_editor.change_setting('animations',self.ask_input('animations','[0/1]'))
-        #elif self.text == 'Load' : self.file_manager()
     def ask_input(self,name,other=''):
         os.system('cls' if os.name == 'nt' else 'clear')
         return input(f"\tSet {name} to{other}: ")
-   # def file_manager(self):
-   #     os.system('cls' if os.name == 'nt' else 'clear')
-   #     folders = [os.path.abspath(name) for name in os.listdir(".") if os.path.isdir(name)]
-   #     while True:
-   #         time.sleep(0.01)
-   #         if keyboard.is_pressed("w") and val > 0 and last_input_received != 0:val-=1;last_input_received = 0
-   #         elif not keyboard.is_pressed("w") and last_input_received == 0: last_input_received = -1
-   #         if keyboard.is_pressed("s") and val < 3 and last_input_received != 1:val+=1;last_input_received = 1
-   #         elif not keyboard.is_pressed("s") and last_input_received == 1: last_input_received = -1
-   #         if keyboard.is_pressed("q"):quit()
-   #         
 async def get_input_menu():
     global input_value,buttons
     Config_editor()
@@ -287,13 +273,8 @@ async def get_input_menu():
         if keyboard.is_pressed('enter') and last_input_received != -2: last_input_received = -2; play_select();await active_btn.activate()
         elif not keyboard.is_pressed('enter') and last_input_received == -2: last_input_received = -1
 if __name__ == '__main__':
-    #game = AISnakeGame()
-    #game.Initialize()
-    #game.CreateMap()
     import snake
     snake.Initialize()
     import_stuff()
     os.system('cls' if os.name == 'nt' else 'clear')
     asyncio.run(get_input_menu())
-    #print(apple.position.x)
-    #train()

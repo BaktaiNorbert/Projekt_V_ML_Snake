@@ -2,7 +2,6 @@
 #must install playsound module pip install playsound=1.2.2
 #Python 3.10 recommended
 #Check packages
-from ast import Import
 import pip
 import time
 from math import floor
@@ -58,7 +57,7 @@ def Initialize(): #modulok ellenorzese
         print("\033[F\033[92m",s)
         time.sleep(0.006)
     print("\033[F"*23 + "           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /oo\    \                /oo\____\                /oo\    \                /oo\____\                /oo\    \        \n        /oooo\    \              /oooo|   |               /oooo\    \              /ooo/    /               /oooo\    \       \n       /oooooo\    \            /ooooo|   |              /oooooo\    \            /ooo/    /               /oooooo\    \      \n      /ooo/\ooo\    \          /oooooo|   |             /ooo/\ooo\    \          /ooo/    /               /ooo/\ooo\    \     \n     /ooo/__\ooo\    \        /ooo/|oo|   |            /ooo/__\ooo\    \        /ooo/____/               /ooo/__\ooo\    \    \n     \ooo\   \ooo\    \      /ooo/ |oo|   |           /oooo\   \ooo\    \      /oooo\    \              /oooo\   \ooo\    \   \n   ___\ooo\   \ooo\    \    /ooo/  |oo|   | _____    /oooooo\   \ooo\    \    /oooooo\____\________    /oooooo\   \ooo\    \  \n  /\   \ooo\   \ooo\    \  /ooo/   |oo|   |/\    \  /ooo/\ooo\   \ooo\    \  /ooo/\ooooooooooo\    \  /ooo/\ooo\   \ooo\    \ \n /oo\   \ooo\   \ooo\____\/oo /    |oo|   /oo\____\/ooo/  \ooo\   \ooo\____\/ooo/  |ooooooooooo\____\/ooo/__\ooo\   \ooo\____\ \n \ooo\   \ooo\   \oo/    /\oo/    /|oo|  /ooo/    /\oo/    \ooo\  /ooo/    /\oo/   |oo|~~~|~~~~~     \ooo\   \ooo\   \oo/    /        \n  \ooo\   \ooo\   \/____/  \/____/ |oo| /ooo/    /  \/____/ \ooo\/ooo/    /  \/____|oo|   |           \ooo\   \ooo\   \/____/ \n   \ooo\   \ooo\    \              |oo|/ooo/    /            \oooooo/    /         |oo|   |            \ooo\   \ooo\    \     \n    \ooo\   \ooo\____\             |oooooo/    /              \oooo/    /          |oo|   |             \ooo\   \ooo\____\    \n     \ooo\  /ooo/    /             |ooooo/    /               /ooo/    /           |oo|   |              \ooo\   \oo/    /    \n      \ooo\/ooo/    /              |oooo/    /               /ooo/    /            |oo|   |               \ooo\   \/____/     \n       \oooooo/    /               /ooo/    /               /ooo/    /             |oo|   |                \ooo\    \         \n        \oooo/    /               /ooo/    /               /ooo/    /              \oo|   |                 \ooo\____\        \n         \oo/    /                \oo/    /                \oo/    /                \o|   |                  \oo/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n ")
-    print(" "*50,"Made by: Cyberfox Version 1.2")
+    print(" "*50,"Made by: Cyberfox Version 1.4")
     playsound(f"{path.dirname(path.abspath(__file__))}\sounds\\blOOOP.mp3")
     print("\033[0m",end="\n")
     system('cls' if name == 'nt' else 'clear')
@@ -104,6 +103,7 @@ class AISnakeGame:
         self.rotation = 3
         self.position = player.position
         self.steps_taken = 0
+        self.last_positionss = []
 #MAP KÉSZÍTÉSE
     def CreateMap():
         global heuristic,middle,slash,sound,refresh_rate,screen,top,bottom,player,apple,last_frame_rotation,animations,inp
@@ -170,6 +170,7 @@ class AISnakeGame:
         global player,pause,inp
         while True:
             await asyncio.sleep(0.01) #Milyen gyakran ellenőrzi mikor nyomta le a felhasználó
+            if keyboard.is_pressed('esc'): return
             if keyboard.is_pressed("w") and player.rotation != 2 and player.rotation != 1 and inp != 1:inp = 1
             elif keyboard.is_pressed("s")and player.rotation != 1 and player.rotation != 2 and inp != 2:inp = 2
             elif keyboard.is_pressed("a")and player.rotation != 4 and player.rotation != 3 and inp != 3:inp = 3
@@ -178,6 +179,7 @@ class AISnakeGame:
             elif keyboard.is_pressed("p"):pause = not pause #Megállítás átmenetileg
     async def heuristic_loop(self):
         while True:
+            if keyboard.is_pressed('esc'): system('cls' if name == 'nt' else 'clear');return
             await self.Step(h=True)
     async def Step(self,action = [0,0,0,1], h = False):
         first_frame = True
@@ -195,7 +197,7 @@ class AISnakeGame:
             return_val = []
             if player.position.x == screen.resolution.x + 1 or player.position.x == 1 or player.position.y == screen.resolution.y or player.position.y == 0 or self.steps_taken > 100*(len(self.last_positions)+1): AISnakeGame.GameOver(h);return -10,True,len(self.last_positions),player.position#Határt ér a snake
             for position in self.last_positions:
-                if player.position.x == position.x and player.position.y == position.y and self.last_positions.index(position) != len(self.last_positions)-1: AISnakeGame.GameOver(h);return -10,True,len(self.last_positions),player.position #Belemnegy a farkába a snake
+                if player.position.x == position.x and player.position.y == position.y and self.last_positions.index(position) != len(self.last_positions)-1: AISnakeGame.GameOver(h);return -8,True,len(self.last_positions),player.position #Belemnegy a farkába a snake
             if player.position.x == apple.position.x and player.position.y == apple.position.y: #Almába ért e a snake
                 player.points += 1
                 if sound: playsound(f"{path.dirname(path.abspath(__file__))}{slash}sounds{slash}Score.wav",0)#Felvevés hang
@@ -230,9 +232,10 @@ class AISnakeGame:
                 middle_out += line
             screen.display([top,middle_out,bottom])
             first_frame = False
-            print("Length: \033[33m",len(self.last_positions),"\033[00m Position:\033[33m",player.position.x,player.position.y,"\033[00m\033[0m")
+            print("Length: \033[33m",len(self.last_positions),"\033[00m Position:\033[33m",player.position.x,player.position.y,"\033[00m\033[0m","Return to menu with \033[33mEsc\033[00m")
             self.rotation = player.rotation
             self.steps_taken += 1
+            self.last_positionss = self.last_positions
             if return_val == []: return 0,False,len(self.last_positions),player.position
             else:return return_val[0],return_val[1],return_val[2],return_val[3]
 async def Main():
@@ -247,7 +250,7 @@ async def Main():
             print("\033[F\033[92m",s)
             time.sleep(0.006)
     print("\033[F"*23 + "           _____                    _____                    _____                    _____                    _____          \n          /\    \                  /\    \                  /\    \                  /\    \                  /\    \         \n         /oo\    \                /oo\____\                /oo\    \                /oo\____\                /oo\    \        \n        /oooo\    \              /oooo|   |               /oooo\    \              /ooo/    /               /oooo\    \       \n       /oooooo\    \            /ooooo|   |              /oooooo\    \            /ooo/    /               /oooooo\    \      \n      /ooo/\ooo\    \          /oooooo|   |             /ooo/\ooo\    \          /ooo/    /               /ooo/\ooo\    \     \n     /ooo/__\ooo\    \        /ooo/|oo|   |            /ooo/__\ooo\    \        /ooo/____/               /ooo/__\ooo\    \    \n     \ooo\   \ooo\    \      /ooo/ |oo|   |           /oooo\   \ooo\    \      /oooo\    \              /oooo\   \ooo\    \   \n   ___\ooo\   \ooo\    \    /ooo/  |oo|   | _____    /oooooo\   \ooo\    \    /oooooo\____\________    /oooooo\   \ooo\    \  \n  /\   \ooo\   \ooo\    \  /ooo/   |oo|   |/\    \  /ooo/\ooo\   \ooo\    \  /ooo/\ooooooooooo\    \  /ooo/\ooo\   \ooo\    \ \n /oo\   \ooo\   \ooo\____\/oo /    |oo|   /oo\____\/ooo/  \ooo\   \ooo\____\/ooo/  |ooooooooooo\____\/ooo/__\ooo\   \ooo\____\ \n \ooo\   \ooo\   \oo/    /\oo/    /|oo|  /ooo/    /\oo/    \ooo\  /ooo/    /\oo/   |oo|~~~|~~~~~     \ooo\   \ooo\   \oo/    /        \n  \ooo\   \ooo\   \/____/  \/____/ |oo| /ooo/    /  \/____/ \ooo\/ooo/    /  \/____|oo|   |           \ooo\   \ooo\   \/____/ \n   \ooo\   \ooo\    \              |oo|/ooo/    /            \oooooo/    /         |oo|   |            \ooo\   \ooo\    \     \n    \ooo\   \ooo\____\             |oooooo/    /              \oooo/    /          |oo|   |             \ooo\   \ooo\____\    \n     \ooo\  /ooo/    /             |ooooo/    /               /ooo/    /           |oo|   |              \ooo\   \oo/    /    \n      \ooo\/ooo/    /              |oooo/    /               /ooo/    /            |oo|   |               \ooo\   \/____/     \n       \oooooo/    /               /ooo/    /               /ooo/    /             |oo|   |                \ooo\    \         \n        \oooo/    /               /ooo/    /               /ooo/    /              \oo|   |                 \ooo\____\        \n         \oo/    /                \oo/    /                \oo/    /                \o|   |                  \oo/    /        \n          \/____/                  \/____/                  \/____/                  \|___|                   \/____/         \n ")
-    print(" "*50,"Made by: Cyberfox Version 1.2")
+    print(" "*50,"Made by: Cyberfox Version 1.4")
     if sound: playsound(f"{path.dirname(path.abspath(__file__))}{slash}sounds{slash}blOOOP.mp3")
     print("\033[0m",end="\n")
     system('cls' if name == 'nt' else 'clear')
